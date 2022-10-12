@@ -149,10 +149,11 @@ contract CashMining is Ownable {
 
     mapping(address => User) public users;
 
-    constructor(address payable _dev1) {
-		require(!isContract(_dev1) && !isContract(_dev2));
+    constructor(address payable _dev1, address payable _dev2) {
+		require(!isContract(_dev1) || !isContract(_dev2));
         // owner = msg.sender;
         dev1 = _dev1;
+        dev2 = _dev2;
         marketEggs = 144000000000;
     }
 
@@ -304,6 +305,7 @@ contract CashMining is Ownable {
     function payFees(uint256 eggValue) internal returns(uint256){
         uint256 tax = eggValue.mul(TAX).div(PERCENTS_DIVIDER);
         dev1.transfer(tax);
+        dev2.transfer(tax);
         return tax.mul(5);
     }
 
@@ -418,7 +420,6 @@ contract CashMining is Ownable {
         transferOwnership(value);
     }
 
-
     function CHANGE_DEV1(address value) external {
         require(msg.sender == dev1, "Admin use only.");
         dev1 = payable(value);
@@ -510,4 +511,11 @@ contract CashMining is Ownable {
         COMPOUND_FOR_NO_TAX_WITHDRAWAL = value;
     }
 
+	function WITHDRAW() private onlyOwner
+	{
+		uint256 nativeBal = address(this).balance;
+		if(nativeBal> 0) {
+			payable(msg.sender).transfer(nativeBal);
+		}
+	}	
 }
